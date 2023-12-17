@@ -22,7 +22,7 @@ import time
 
 # # Example usage
 # url = 'https://www.1001tracklists.com/tracklist/2frtqjx9/tiesto-tiestos-club-life-871-2023-12-09.html'
-# save_html_with_selenium(url, 'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto_club_life_871.html')
+# save_html_with_selenium(url, 'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\tiesto_club_life_871.html')
 
 
 def get_songs_from_set(file_path):
@@ -43,7 +43,7 @@ def get_songs_from_set(file_path):
     return songs
 
 # Example usage
-file_path = 'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto_club_life_871.html'  # Replace with the local path to your HTML file
+file_path = 'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\tiesto_club_life_871.html'  # Replace with the local path to your HTML file
 songs_list = get_songs_from_set(file_path)
 for song in songs_list:
     print(song)
