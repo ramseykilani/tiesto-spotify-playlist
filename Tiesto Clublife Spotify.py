@@ -69,5 +69,4 @@ def create_spotify_playlist(songs, playlist_name):
 
     sp.playlist_add_items(playlist['id'], track_ids)
 
-# Example usage
 create_spotify_playlist(songs_list, f'Tiesto Club Life {episode}')
