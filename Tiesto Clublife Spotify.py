@@ -6,7 +6,15 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+import configparser
+
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+client_id = config['spotify']['client_id']
+client_secret = config['spotify']['client_secret']
 episode = "870"
+
 
 def save_html_with_selenium(url, file_name):
     # Set up the Selenium WebDriver
@@ -52,8 +60,8 @@ for song in songs_list:
     print(song)
 
 def create_spotify_playlist(songs, playlist_name):
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id="9d60446d0d8f495bb77f3e78da709dc3",
-                                                   client_secret="7b6695c2a30b4bdb9d9dba790e97e0b4",
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
+                                                   client_secret=client_secret,
                                                    redirect_uri="http://localhost:8888/callback",
                                                    scope="playlist-modify-public"))
 
