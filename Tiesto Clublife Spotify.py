@@ -11,6 +11,8 @@ import configparser
 from datetime import datetime, timedelta
 import re
 import os
+import base64
+from PIL import Image
 
 ##### Function ##########
 
@@ -49,7 +51,7 @@ def get_songs_from_set(file_path):
 
     return songs
 
-def get_set_artwork(file_path):
+def get_set_artwork(file_path,album_art_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         soup = BeautifulSoup(file, 'html.parser')
 
@@ -65,13 +67,13 @@ def get_set_artwork(file_path):
     if image_url:
         image_response = requests.get(image_url)
         if image_response.status_code == 200:
-            with open('album_art.jpg', 'wb') as file:
+            with open(album_art_path, 'wb') as file:
                 file.write(image_response.content)
     
     return True
 
-def get_episode_url(episode_number):
-    with open('C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\HTMLs\\index.html', 'r', encoding='utf-8') as file:
+def get_episode_url(episode_number,index_path):
+    with open(index_path, 'r', encoding='utf-8') as file:
         soup = BeautifulSoup(file, 'html.parser')
 
     # Search for the episode link
@@ -84,11 +86,11 @@ def get_episode_url(episode_number):
 
     return episode_link
 
-def create_spotify_playlist(songs, playlist_name,client_id,client_secret):
+def create_spotify_playlist(songs, playlist_name,client_id,client_secret, album_art_path):
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
                                                    client_secret=client_secret,
                                                    redirect_uri="http://localhost:8888/callback",
-                                                   scope="playlist-modify-public"))
+                                                   scope="playlist-modify-public ugc-image-upload"))
 
     user_id = sp.current_user()['id']
     playlist = sp.user_playlist_create(user_id, playlist_name)
@@ -102,6 +104,12 @@ def create_spotify_playlist(songs, playlist_name,client_id,client_secret):
 
     sp.playlist_add_items(playlist['id'], track_ids)
 
+    with open(album_art_path, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read()).decode()
+
+    # Upload album art
+    sp.playlist_upload_cover_image(playlist['id'], encoded_string)
+
 ####### Code ###########
 
 config = configparser.ConfigParser()
@@ -110,27 +118,28 @@ config.read('C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-pl
 client_id = config['spotify']['client_id']
 client_secret = config['spotify']['client_secret']
 episode_number = "867"
-episode_html_path = f'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\HTMLs\\tiesto_club_life_{episode_number}.html'
+episode_html_path = f'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\assets\\tiesto_club_life_{episode_number}.html'
+album_art_path = 'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\assets\\album_art.jpg'
+
 
 # Save index file
 index_url = 'https://www.1001tracklists.com/source/6wndmv/tiestos-club-life/index.html'
-index_path = 'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\HTMLs\\index.html'
+index_path = 'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\assets\\index.html'
 # save_html_with_selenium(index_url, index_path)
 
 # Get current episode url
-episode_url = get_episode_url(int(episode_number))
+episode_url = get_episode_url(int(episode_number),index_path)
 print(episode_url)
 
 # Get episode song list
 if episode_url:
-    # full_url = 'https://www.1001tracklists.com' + episode_url  # Assuming the fetched URL is relative
-    # save_html_with_selenium(full_url, episode_html_path)
-    # songs_list = get_songs_from_set(episode_html_path)
-    get_set_artwork(episode_html_path)
-    # for song in songs_list:
-    #     print(song)
+    # save_html_with_selenium(episode_url, episode_html_path)
+    songs_list = get_songs_from_set(episode_html_path)
+    get_set_artwork(episode_html_path,album_art_path)
+    for song in songs_list:
+        print(song)
 else:
     print(f"Episode {episode_number} not found.")
 
 # Create playlist from list
-# create_spotify_playlist(songs_list, f'Tiesto Club Life {episode_number}',client_id,client_secret)
+create_spotify_playlist(songs_list, f'Tiesto Club Life {episode_number}',client_id,client_secret,album_art_path)
