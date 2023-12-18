@@ -7,5 +7,5 @@ If you want to do it for older episodes, open the index page, scroll down a lot,
 Add a config.ini like below with your spotify id and secret
 
 [spotify]
-client_id = 9d60446d0d8f495bb77f3e78da709dc3
-client_secret = be8efbcb0c1a4d50ab9ce2df6b9bb9d6
+client_id = 
+client_secret = 
