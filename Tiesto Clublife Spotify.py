@@ -117,7 +117,7 @@ config.read('C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-pl
 
 client_id = config['spotify']['client_id']
 client_secret = config['spotify']['client_secret']
-episode_number = "867"
+episode_number = "866"
 episode_html_path = f'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\assets\\tiesto_club_life_{episode_number}.html'
 album_art_path = 'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\assets\\album_art.jpg'
 
@@ -133,7 +133,7 @@ print(episode_url)
 
 # Get episode song list
 if episode_url:
-    # save_html_with_selenium(episode_url, episode_html_path)
+    save_html_with_selenium(episode_url, episode_html_path)
     songs_list = get_songs_from_set(episode_html_path)
     get_set_artwork(episode_html_path,album_art_path)
     for song in songs_list:
