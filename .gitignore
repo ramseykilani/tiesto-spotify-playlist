@@ -1,2 +1,5 @@
 # other ignored files and patterns
 config.ini
+assets/
+album_art.jpg
+
