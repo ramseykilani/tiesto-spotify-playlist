@@ -22,7 +22,7 @@ def save_html_with_selenium(url, file_name):
     driver = webdriver.Chrome(service=service)
 
     driver.get(url)
-    time.sleep(3)  # Wait for the page to load completely
+    time.sleep(2)  # Wait for the page to load completely
 
     # Save the page source to a file
     with open(file_name, 'w', encoding='utf-8') as file:
@@ -117,29 +117,65 @@ config.read('C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-pl
 
 client_id = config['spotify']['client_id']
 client_secret = config['spotify']['client_secret']
-episode_number = "866"
-episode_html_path = f'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\assets\\tiesto_club_life_{episode_number}.html'
-album_art_path = 'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\assets\\album_art.jpg'
+
+################################
+## For multiple episodes #######
+################################
+for episode_number in range(820,810,-1):
+    episode_html_path = f'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\assets\\tiesto_club_life_{episode_number}.html'
+    album_art_path = 'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\assets\\album_art.jpg'
 
 
-# Save index file
-index_url = 'https://www.1001tracklists.com/source/6wndmv/tiestos-club-life/index.html'
-index_path = 'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\assets\\index.html'
-# save_html_with_selenium(index_url, index_path)
+    # Save index file
+    index_url = 'https://www.1001tracklists.com/source/6wndmv/tiestos-club-life/index.html'
+    # index_path = 'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\assets\\index.html'
+    # save_html_with_selenium(index_url, index_path)
 
-# Get current episode url
-episode_url = get_episode_url(int(episode_number),index_path)
-print(episode_url)
+    # Get current episode url
+    episode_url = get_episode_url(int(episode_number),index_path)
+    print(episode_url)
 
-# Get episode song list
-if episode_url:
-    save_html_with_selenium(episode_url, episode_html_path)
-    songs_list = get_songs_from_set(episode_html_path)
-    get_set_artwork(episode_html_path,album_art_path)
-    for song in songs_list:
-        print(song)
-else:
-    print(f"Episode {episode_number} not found.")
+    # Get episode song list
+    if episode_url:
+        save_html_with_selenium(episode_url, episode_html_path)
+        songs_list = get_songs_from_set(episode_html_path)
+        get_set_artwork(episode_html_path,album_art_path)
+        for song in songs_list:
+            print(song)
+    else:
+        print(f"Episode {episode_number} not found.")
 
-# Create playlist from list
-create_spotify_playlist(songs_list, f'Tiesto Club Life {episode_number}',client_id,client_secret,album_art_path)
+    # Create playlist from list
+    create_spotify_playlist(songs_list, f'Tiesto Club Life {episode_number}',client_id,client_secret,album_art_path)
+
+#######################################
+## For one episode at a time ##########
+#######################################
+# episode_number = "872"
+# episode_html_path = f'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\assets\\tiesto_club_life_{episode_number}.html'
+# # episode_html_path = f'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\assets\\tiesto_club_life_{episode_number}.html'
+# album_art_path = 'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\assets\\album_art.jpg'
+
+
+# # Save index file
+# # index_url = 'https://www.1001tracklists.com/source/6wndmv/tiestos-club-life/index.html'
+# index_path = 'C:\\Users\\kilan\\IDrive-Sync\\Documents\\Coding\\tiesto-spotify-playlist\\assets\\index.html'
+# # save_html_with_selenium(index_url, index_path)
+
+# # Get current episode url
+# episode_url = get_episode_url(int(episode_number),index_path)
+# print(episode_url)
+# episode_url = 'https://www.1001tracklists.com/tracklist/1jvyxlt1/tiesto-tiestos-club-life-872-aftrhrs-yearmix-2023-12-16.html'
+
+# # Get episode song list
+# if episode_url:
+#     save_html_with_selenium(episode_url, episode_html_path)
+#     songs_list = get_songs_from_set(episode_html_path)
+#     get_set_artwork(episode_html_path,album_art_path)
+#     for song in songs_list:
+#         print(song)
+# else:
+#     print(f"Episode {episode_number} not found.")
+
+# # Create playlist from list
+# create_spotify_playlist(songs_list, f'Tiesto Club Life {episode_number}',client_id,client_secret,album_art_path)
